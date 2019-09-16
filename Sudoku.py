@@ -36,38 +36,67 @@ class Board():
                     print(' === ', end='')
             print('\n')
 
-    def in_row(self, row, value, brd):
-        return value in brd[row]
+    def in_row(self, row, value):
+        return value in self.board[row]
 
-    def in_col(self, col, value, brd):
+    def in_col(self, col, value):
         search_col = []
 
-        for i in range(len(brd)):
-            search_col.append(brd[i][col])
+        for i in range(len(self.board)):
+            search_col.append(self.board[i][col])
 
         return value in search_col
 
-    def in_block(self, row, col, value, brd):
+    def in_block(self, row, col, value):
         x_val = int(col / 3)
         y_val = int(row / 3)
 
         search_block = []
 
-        for i in range(int(len(brd) / 3)):
-            for j in range(int(len(brd[0]) / 3)):
-                search_block.append(brd[j + y_val * 3][i + x_val * 3])
+        for i in range(int(len(self.board) / 3)):
+            for j in range(int(len(self.board[0]) / 3)):
+                search_block.append(self.board[j + y_val * 3][i + x_val * 3])
 
         return value in search_block
 
-    def is_valid(self, row, col, val, brd):
+    def is_valid(self, row, col, val):
 
-        return not (in_row(row, val, brd) or in_col(col, val, brd)
-                    or in_block(row, col, val, brd))
+        return not (self.in_row(row, val) or self.in_col(col, val)
+                    or self.in_block(row, col, val))
+        
+    def get_board(self):
+        return self.board
 
 
-class Game:
-    def __init__(self):
-      pass
 
-    def solve(self, brd):
-        pass
+
+def solve(brd):
+    
+    empty_spaces = []
+    
+    for row_index, row in enumerate(brd.get_board()):
+        for col_index, col in enumerate(row):
+            if col == None:
+                empty_spaces.append((row_index, col_index))
+                
+    if not empty_spaces:
+        return brd
+    
+    target = empty_spaces[0]
+
+    for i in range(9):
+        if brd.is_valid(target[0], target[1], i+1):
+            brd.set_square(target[0], target[1], i+1)
+            solution = solve(brd)
+            if not solution:
+                brd.unset_square(target[0], target[1])
+            else: 
+                return solution
+                
+    return False
+        
+                    
+                    
+                
+                
+            
