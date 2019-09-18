@@ -67,11 +67,23 @@ class Board():
     def get_board(self):
         return self.board
 
+    def set_board(self, brd):
+      if len(brd) != 9:
+        print("Cannot set board!")
+        return False
+      
+      for i in brd:
+        if len(i) != 9:
+          print("Cannot set board!")
+          return False
+
+      self.board = brd
+
 
 
 
 def solve(brd):
-    
+
     empty_spaces = []
     
     for row_index, row in enumerate(brd.get_board()):
@@ -94,9 +106,23 @@ def solve(brd):
                 return solution
                 
     return False
-        
-                    
-                    
-                
-                
+
+input_board = []
+
+print("Please enter the board using 0's for empty spaces: ")
+
+for i in range(9):
+  input_board.append([None if int(x) == 0 else int(x) for x in input()])
+
+brd = Board()
+
+brd.set_board(input_board)
+
+solution = solve(brd)
+
+print('\n\n')
+
+solution.draw_board()
+
+
             
